@@ -25,7 +25,7 @@ jobs:
   secure-ci:
     name: Secure CI Quality Gate
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
 
     steps:
       - name: Checkout code
@@ -84,6 +84,13 @@ jobs:
       # its reports. The final Quality Gate parses the JSON and is the
       # authoritative blocking control.
       # ---------------------------------------------------------------
+      - name: Cache OWASP Dependency-Check data
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository/org/owasp/dependency-check-data
+          key: dependency-check-${{ runner.os }}-${{ hashFiles('pom.xml') }}
+          restore-keys: |
+            dependency-check-${{ runner.os }}-
       - name: Run OWASP Dependency-Check
         id: dependency_check
         continue-on-error: true
