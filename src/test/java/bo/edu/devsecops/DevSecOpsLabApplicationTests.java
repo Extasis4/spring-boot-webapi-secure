@@ -17,14 +17,14 @@ class DevSecOpsLabApplicationTests {
     private MockMvc mockMvc;
 
     @Test
-    void productSearchIsAvailable() throws Exception {
+    void productSearchRequiresAuthentication() throws Exception {
         mockMvc.perform(get("/api/products/search").param("name", "Laptop"))
-                .andExpect(status().isOk());
+                .andExpect(status().isForbidden());
     }
 
     @Test
-    void adminEndpointIsCurrentlyExposedForTheLab() throws Exception {
+    void adminEndpointRequiresAuthentication() throws Exception {
         mockMvc.perform(get("/api/admin/users/1"))
-                .andExpect(status().isOk());
+                .andExpect(status().isForbidden());
     }
 }
