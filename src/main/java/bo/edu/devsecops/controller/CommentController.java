@@ -13,9 +13,9 @@ import java.util.Map;
 @RequestMapping("/api/comments")
 public class CommentController {
 
-    @PostMapping(value = "/preview", produces = MediaType.TEXT_HTML_VALUE)
+    @PostMapping(value = "/preview", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> preview(@RequestBody Map<String, String> body) {
         String comment = body.getOrDefault("comment", "");
-        return ResponseEntity.ok("<html><body><h2>Vista previa</h2><p>" + comment + "</p></body></html>");
+        return ResponseEntity.ok(comment);
     }
 }
