@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,10 @@ import java.util.Map;
 @RequestMapping("/api/products")
 public class ProductController {
 
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP2",
+        justification = "JdbcTemplate is managed by the Spring container."
+    )
     private final JdbcTemplate jdbcTemplate;
 
     public ProductController(JdbcTemplate jdbcTemplate) {
@@ -21,7 +26,7 @@ public class ProductController {
 
     @GetMapping("/search")
     public List<Map<String, Object>> search(@RequestParam(defaultValue = "") String name) {
-        String sql = "SELECT id, name, price FROM products WHERE name LIKE '%" + name + "%'";
-        return jdbcTemplate.queryForList(sql);
+        String sql = "SELECT id, name, price FROM products WHERE name LIKE ?";
+        return jdbcTemplate.queryForList(sql, "%" + name + "%");
     }
 }
